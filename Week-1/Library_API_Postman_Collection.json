@@ -1,0 +1,178 @@
+{
+  "info": {
+    "name": "Library Management System API",
+    "_postman_id": "lib-mgmt-2026",
+    "description": "Complete REST API for Library Management System built with Flask.\n\nHow to use:\n1. Make sure Flask server is running: python run.py\n2. Base URL is http://127.0.0.1:5000\n3. Run requests in order: Add Book → Add Member → Borrow → Return",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:5000", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Get All Books",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/books/",
+            "description": "Returns a list of every book in the library with availability info."
+          }
+        },
+        {
+          "name": "Add a Book",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/books/",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Clean Code\",\n  \"author\": \"Robert C. Martin\",\n  \"isbn\": \"978-0132350884\",\n  \"genre\": \"Programming\",\n  \"total_copies\": 3\n}"
+            },
+            "description": "Add a new book. 'title', 'author', 'isbn' are required."
+          }
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/books/1",
+            "description": "Get details of book with ID=1. Change the ID in the URL as needed."
+          }
+        },
+        {
+          "name": "Update a Book",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/books/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"genre\": \"Software Engineering\",\n  \"total_copies\": 5\n}"
+            },
+            "description": "Update any field of a book. Only send the fields you want to change."
+          }
+        },
+        {
+          "name": "Delete a Book",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/books/1",
+            "description": "Permanently delete a book by ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Members",
+      "item": [
+        {
+          "name": "Get All Members",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/members/",
+            "description": "Returns all registered library members."
+          }
+        },
+        {
+          "name": "Register a Member",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/members/",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ishika Dubey\",\n  \"email\": \"ishika@example.com\",\n  \"phone\": \"9876543210\",\n  \"address\": \"Delhi, India\"\n}"
+            },
+            "description": "Register a new member. 'name' and 'email' are required."
+          }
+        },
+        {
+          "name": "Get Member by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/members/1",
+            "description": "Get a single member's details."
+          }
+        },
+        {
+          "name": "Update a Member",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/members/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9999988888\",\n  \"address\": \"Mumbai, India\"\n}"
+            },
+            "description": "Update member info. Send only the fields you want to change."
+          }
+        },
+        {
+          "name": "Delete a Member",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/members/1",
+            "description": "Remove a member from the system."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Borrow & Return",
+      "item": [
+        {
+          "name": "Borrow a Book",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/borrow/",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"book_id\": 1,\n  \"member_id\": 1\n}"
+            },
+            "description": "Issue a book to a member for 14 days. Fails if no copies available."
+          }
+        },
+        {
+          "name": "Return a Book",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/borrow/return",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"record_id\": 1\n}"
+            },
+            "description": "Return a borrowed book. Use the record ID from the borrow response."
+          }
+        },
+        {
+          "name": "Active Borrows (Not Returned)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/borrow/active",
+            "description": "Lists all books currently checked out."
+          }
+        },
+        {
+          "name": "Full Borrow History",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/borrow/history",
+            "description": "Complete log of all borrowing transactions."
+          }
+        },
+        {
+          "name": "Overdue Books",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/borrow/overdue",
+            "description": "Lists all books that are past their due date and not yet returned."
+          }
+        }
+      ]
+    }
+  ]
+}
